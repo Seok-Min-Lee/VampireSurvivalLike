@@ -176,8 +176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3ce9277bbf96940b05ac70af95aef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 50
-  hpMax: 50
+  hp: 25
+  hpMax: 25
   speed: 1
   canvasGO: {fileID: 7515413502868528246}
   guage: {fileID: 5176741423747982368}

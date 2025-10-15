@@ -45,6 +45,8 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         container.Charge(this);
 
+        ItemContainer.Instance.Batch(transform.position);
+
         player = null;
         container = null;
     }
