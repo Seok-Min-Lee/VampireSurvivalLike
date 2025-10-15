@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     [Header("Current Value")]
-    [SerializeField] protected int hp;
+    [SerializeField] protected int hp = 1;
 
     [Header("Init Value")]
     [SerializeField] private int hpMax = 1;
@@ -47,6 +47,20 @@ public class Enemy : MonoBehaviour
 
         player = null;
         container = null;
+    }
+    public virtual void OnDamage(int damage)
+    {
+        hp -= damage;
+
+        if (hp < 0)
+        {
+            Die();
+        }
+        else
+        {
+            canvasGO.SetActive(true);
+            guage.fillAmount = (float)hp / (float)hpMax;
+        }
     }
     protected virtual void Move()
     {
