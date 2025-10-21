@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3ce9277bbf96940b05ac70af95aef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 0}
   hp: 25
   isAddict: 0
   addictDamage: 0
@@ -391,7 +392,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 5

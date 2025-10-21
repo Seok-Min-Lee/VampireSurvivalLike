@@ -49,8 +49,6 @@ public class Player : MonoBehaviour
         {
             weaponTexts[i].text = weaponLevels[i].ToString();
         }
-
-        weaponContainers[1].GetComponent<WeaponContainerB>().Add();
     }
     private void Update()
     {
@@ -117,6 +115,7 @@ public class Player : MonoBehaviour
                 weaponTexts[rewardInfo.id].text = weaponLevels[rewardInfo.id].ToString();
                 break;
             case 3:
+                weaponContainers[rewardInfo.id].GetComponent<WeaponContainerD>().Add();
                 weaponLevels[rewardInfo.id]++;
                 weaponTexts[rewardInfo.id].text = weaponLevels[rewardInfo.id].ToString();
                 break;
