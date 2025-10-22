@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject canvasGO;
     [SerializeField] private Image guage;
 
-    private Transform player;
+    private Transform target;
     private EnemyContainer container;
     private Rigidbody2D rigidbody;
 
@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
         transform.position = position;
         transform.rotation = rotation;
 
-        player = Player.Instance.transform;
+        target = Player.Instance.transform;
         this.container = container;
     }
     public virtual void Die()
@@ -64,9 +64,17 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         container.Charge(this);
 
-        ItemContainer.Instance.Batch(transform.position);
+        if (ItemContainer.Instance != null)
+        {
+            ItemContainer.Instance.Batch(transform.position);
+        }
 
-        player = null;
+        if (Player.Instance != null)
+        {
+            Player.Instance.KillEnemy();
+        }
+
+        target = null;
         container = null;
     }
     public virtual void OnDamage(int damage)
@@ -97,7 +105,7 @@ public class Enemy : MonoBehaviour
     }
     protected virtual void Move()
     {
-        if (player == null)
+        if (target == null)
         {
             return;
         }
@@ -107,7 +115,7 @@ public class Enemy : MonoBehaviour
             rigidbody.linearVelocity = Vector2.zero;
         }
 
-        Vector2 dir = (player.position - transform.position).normalized;
+        Vector2 dir = (target.position - transform.position).normalized;
         transform.position += (Vector3)(dir * speed * Time.deltaTime);
     }
 }

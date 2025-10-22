@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
 {
     public static Player Instance;
     [SerializeField] private Transform[] weaponContainers;
+    [SerializeField] private CircleCollider2D magnetCollider;
+
     [SerializeField] private float speed;
     [SerializeField] private int strength;
 
@@ -17,18 +19,24 @@ public class Player : MonoBehaviour
     [SerializeField] private Image hpGuage;
     [SerializeField] private Image expGuage;
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI lifeText;
     [SerializeField] private TextMeshProUGUI killText;
+    [SerializeField] private TextMeshProUGUI magnetText;
+    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private TextMeshProUGUI strengthText;
     [SerializeField] private TextMeshProUGUI[] weaponTexts;
 
     public int Strength => strength;
-
     public Vector3 moveVec { get; private set; }
 
     private int exp = 0;
     private int expMax = 100;
     private int level = 1;
+    private int lifeCount = 0;
     private int killCount = 0;
-
+    private int magnetLevel = 1;
+    private int speedLevel = 1;
+    private int strengthLevel = 1;
     private int[] weaponLevels;
 
     private void Awake()
@@ -45,6 +53,10 @@ public class Player : MonoBehaviour
         expGuage.fillAmount = 0f;
         levelText.text = level.ToString();
         killText.text = killCount.ToString();
+        magnetText.text = magnetLevel.ToString();
+        speedText.text = speedLevel.ToString();
+        strengthText.text = strengthLevel.ToString();
+        lifeText.text = lifeCount.ToString();
         for (int i = 0; i < weaponTexts.Length; i++)
         {
             weaponTexts[i].text = weaponLevels[i].ToString();
@@ -66,10 +78,14 @@ public class Player : MonoBehaviour
         weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
 #endif
     }
+    public void KillEnemy()
+    {
+        killCount++;
+        killText.text = killCount.ToString();
+    }
     public void GainExp(int value)
     {
         exp += value;
-        killCount++;
 
         if (exp > expMax)
         {
@@ -118,6 +134,25 @@ public class Player : MonoBehaviour
                 weaponContainers[rewardInfo.id].GetComponent<WeaponContainerD>().Add();
                 weaponLevels[rewardInfo.id]++;
                 weaponTexts[rewardInfo.id].text = weaponLevels[rewardInfo.id].ToString();
+                break;
+            case 4:
+                magnetCollider.radius += 0.1f;
+                magnetLevel++;
+                magnetText.text = magnetLevel.ToString();
+                break;
+            case 5:
+                speed *= 1.05f;
+                speedLevel++;
+                speedText.text = speedLevel.ToString();
+                break;
+            case 6:
+                strength += 1;
+                strengthLevel++;
+                strengthText.text = strengthLevel.ToString();
+                break;
+            case 7:
+                lifeCount += 1;
+                lifeText.text = lifeCount.ToString();
                 break;
         }
     }

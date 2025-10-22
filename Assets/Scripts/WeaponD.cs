@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class WeaponD : Weapon
 {
-    [SerializeField] private int speed;
     [SerializeField] private GameObject flare;
 
     private Rigidbody2D rigidbody;
@@ -40,7 +39,7 @@ public class WeaponD : Weapon
 
         transform.position = position;
         transform.rotation = rotation;
-        rigidbody.AddForce(direction * speed, ForceMode2D.Impulse);
+        rigidbody.AddForce(direction * Random.Range(8f, 16f), ForceMode2D.Impulse);
         rigidbody.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
     }
     public void Explosion()
