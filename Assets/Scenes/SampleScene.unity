@@ -1258,6 +1258,7 @@ GameObject:
   - component: {fileID: 405397951}
   - component: {fileID: 405397950}
   - component: {fileID: 405397953}
+  - component: {fileID: 405397956}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -1303,13 +1304,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.5, y: 0.5}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.4, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &405397951
 Rigidbody2D:
@@ -1357,17 +1358,17 @@ MonoBehaviour:
   - {fileID: 1262095960}
   magnetCollider: {fileID: 1461840808}
   speed: 0.025
-  strength: 1
+  strength: 0
   joystick: {fileID: 488232000}
   canvasGO: {fileID: 1450227563}
   hpGuage: {fileID: 1570333366}
   expGuage: {fileID: 755114498}
   levelText: {fileID: 495585070}
+  lifeText: {fileID: 818957277}
   killText: {fileID: 1823358449}
   magnetText: {fileID: 524114650}
   speedText: {fileID: 381294308}
   strengthText: {fileID: 775258677}
-  lifeText: {fileID: 818957277}
   weaponTexts:
   - {fileID: 1153950214}
   - {fileID: 1541175026}
@@ -1414,7 +1415,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1461840807}
   - {fileID: 236381562}
@@ -1480,6 +1481,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &405397956
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405397949}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8d476be16b7a5b941a1ba97d17a50ab3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &435322587
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,7 +1906,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -0.8}
+  m_SizeDelta: {x: 0, y: -0.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &577386855
 MonoBehaviour:
@@ -3374,8 +3397,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.7}
-  m_SizeDelta: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 0.75, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1450227565
 MonoBehaviour:
@@ -3696,7 +3719,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 0.19999999}
+  m_SizeDelta: {x: 0.75, y: 0.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1570333366
 MonoBehaviour:
@@ -3973,9 +3996,9 @@ MonoBehaviour:
   - {fileID: 7913316347271161765, guid: 29e48337c06f7a54d8db7f57f1f6b529, type: 3}
   - {fileID: 7913316347271161765, guid: 897dc8bbd9654ba4e80c42ca97da78fc, type: 3}
   - {fileID: 7913316347271161765, guid: a71f59a801edb104f91c23a02719b0ac, type: 3}
-  tileScale: 2
-  radius: 3
-  initialPoolSize: 64
+  tileScale: 1
+  radius: 6
+  initialPoolSize: 36
   player: {fileID: 405397954}
 --- !u!4 &1771084908
 Transform:

@@ -21,11 +21,13 @@ public class Enemy : MonoBehaviour
     private Transform target;
     private EnemyContainer container;
     private Rigidbody2D rigidbody;
+    private SpriteRenderer spriteRenderer;
 
     private float addictTimer = 0f;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void Update()
     {
@@ -117,5 +119,6 @@ public class Enemy : MonoBehaviour
 
         Vector2 dir = (target.position - transform.position).normalized;
         transform.position += (Vector3)(dir * speed * Time.deltaTime);
+        spriteRenderer.flipX = dir.x > 0;
     }
 }

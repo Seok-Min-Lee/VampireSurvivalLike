@@ -7,16 +7,13 @@ public class WeaponContainerD : WeaponContainer<WeaponD>
 {
     private Queue<WeaponD> bulletPool = new Queue<WeaponD>();
     private float timer = 0f;
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Time.timeScale == 0f)
         {
             return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Add();
         }
 
         if (timer > 1f)

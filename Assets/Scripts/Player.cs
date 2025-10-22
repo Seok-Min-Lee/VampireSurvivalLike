@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public static Player Instance;
+
     [SerializeField] private Transform[] weaponContainers;
     [SerializeField] private CircleCollider2D magnetCollider;
 
@@ -29,6 +30,9 @@ public class Player : MonoBehaviour
     public int Strength => strength;
     public Vector3 moveVec { get; private set; }
 
+    public Animator animator { get; private set; }
+    public SpriteRenderer spriteRenderer { get; private set; }
+
     private int exp = 0;
     private int expMax = 100;
     private int level = 1;
@@ -42,6 +46,8 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         weaponLevels = new int[weaponTexts.Length];
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void Start()
     {
@@ -62,21 +68,21 @@ public class Player : MonoBehaviour
             weaponTexts[i].text = weaponLevels[i].ToString();
         }
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (Time.timeScale == 0)
         {
             return;
         }
-
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
+        moveVec = new Vector3(joystick.Horizontal, joystick.Vertical, 0f) * speed;
         transform.position += moveVec;
-#else
-        transform.position += new Vector3(joystick.Horizontal, joystick.Vertical, 0f) * speed;
+        spriteRenderer.flipX = moveVec.x < 0;
 
         float angle = Mathf.Atan2(joystick.Vertical, joystick.Horizontal) * Mathf.Rad2Deg;
         weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
 #endif
+        transform.position += moveVec;
     }
     public void KillEnemy()
     {
@@ -160,12 +166,20 @@ public class Player : MonoBehaviour
     {
         Vector2 v = value.Get<Vector2>();
 
-        if (v != null)
+        if (v.sqrMagnitude > 0.001f)
         {
             moveVec = new Vector3(v.x, v.y, 0f) * speed;
+            animator.SetBool("isMove", true);
 
             float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
             weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
+
+            spriteRenderer.flipX = moveVec.x < 0;
+        }
+        else
+        {
+            moveVec = Vector3.zero;
+            animator.SetBool("isMove", false);
         }
     }
 }

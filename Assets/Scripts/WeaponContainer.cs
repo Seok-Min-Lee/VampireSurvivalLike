@@ -9,6 +9,15 @@ public class WeaponContainer<T> : MonoBehaviour where T : Weapon
 
     protected List<T> weapons = new List<T>();
     protected int activeCount = 0;
+    protected virtual void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Add();
+        }
+#endif
+    }
     public virtual void Init()
     {
         for (int i = 0; i < WEAPON_COUNT_MAX; i++)

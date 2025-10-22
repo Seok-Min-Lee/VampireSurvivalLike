@@ -14,8 +14,10 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
     {
         base.Init();
     }
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Time.timeScale == 0f)
         {
             return;
