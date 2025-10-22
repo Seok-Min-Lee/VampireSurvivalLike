@@ -12,21 +12,25 @@ public class Item : MonoBehaviour
         if (isMove)
         {
             Vector2 dir = Player.Instance.transform.position - transform.position;
-            float distance = dir.magnitude;
 
-            float speed = Mathf.Lerp(1f, 10f, 1 - (distance / 10f));
-            transform.position += (Vector3)(dir.normalized * speed * Time.deltaTime);
+            if (dir.sqrMagnitude > 0.001f)
+            {
+                float distance = dir.magnitude;
+
+                float speed = Mathf.Lerp(1f, 10f, 1 - (distance / 10f));
+                transform.position += (Vector3)(dir.normalized * speed * Time.deltaTime);
+            }
+            else
+            {
+                Disappear();
+            }
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("PlayerArea"))
         {
-            Drain();
-        }
-        else if (collision.gameObject.CompareTag("Player"))
-        {
-            Gain();
+            OnDetected();
         }
     }
     public void Init(Vector3 position)
@@ -35,7 +39,7 @@ public class Item : MonoBehaviour
 
         gameObject.SetActive(true);
     }
-    private void Drain()
+    private void OnDetected()
     {
         if (isMove)
         {
@@ -61,7 +65,7 @@ public class Item : MonoBehaviour
             isMove = true;
         }
     }
-    private void Gain()
+    private void Disappear()
     {
         StopCoroutine(coroutine);
 

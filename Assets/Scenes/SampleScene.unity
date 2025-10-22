@@ -1358,7 +1358,7 @@ MonoBehaviour:
   - {fileID: 1262095960}
   magnetCollider: {fileID: 1461840808}
   speed: 0.025
-  strength: 0
+  strength: 1
   joystick: {fileID: 488232000}
   canvasGO: {fileID: 1450227563}
   hpGuage: {fileID: 1570333366}
