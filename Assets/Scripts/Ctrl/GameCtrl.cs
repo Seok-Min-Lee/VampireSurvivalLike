@@ -16,6 +16,8 @@ public class GameCtrl : MonoBehaviour
 
     [SerializeField] private RewardButton[] rewardButtons;
     [SerializeField] private RewardInfo[] rewardInfoes;
+
+    private float timer = 0f;
     private void Awake()
     {
         Instance = this;
@@ -26,9 +28,10 @@ public class GameCtrl : MonoBehaviour
     }
     private void Update()
     {
-        float time = Time.time;
-        int minutes = (int)(time / 60);
-        int seconds = (int)(time % 60);
+        timer += Time.deltaTime;
+
+        int minutes = (int)(timer / 60);
+        int seconds = (int)(timer % 60);
 
         timeText.text = $"{minutes:00}:{seconds:00}";
     }
@@ -44,7 +47,8 @@ public class GameCtrl : MonoBehaviour
     }
     public void OnClickHome()
     {
-        Debug.Log("OnClickHome");
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("00_Title");
     }
     public void OnLevelUp()
     {

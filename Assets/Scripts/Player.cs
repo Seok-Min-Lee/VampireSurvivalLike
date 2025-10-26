@@ -51,18 +51,44 @@ public class Player : MonoBehaviour
         }
         statDictionary[PlayerStat.Level].Init(1);
         statDictionary[PlayerStat.Kill].Init(0);
-        statDictionary[PlayerStat.Magnet].Init(1);
-        statDictionary[PlayerStat.Speed].Init(1);
-        statDictionary[PlayerStat.Strength].Init(1);
+        statDictionary[PlayerStat.Magnet].Init(0);
+        statDictionary[PlayerStat.Speed].Init(0);
+        statDictionary[PlayerStat.Strength].Init(0);
         statDictionary[PlayerStat.Life].Init(0);
-        statDictionary[PlayerStat.WeaponA].Init(StaticValues.playerCharacterNum == 0 ? 1 : 0);
-        statDictionary[PlayerStat.WeaponB].Init(StaticValues.playerCharacterNum == 1 ? 1 : 0);
-        statDictionary[PlayerStat.WeaponC].Init(StaticValues.playerCharacterNum == 2 ? 1 : 0);
-        statDictionary[PlayerStat.WeaponD].Init(StaticValues.playerCharacterNum == 3 ? 1 : 0);
+        statDictionary[PlayerStat.WeaponA].Init(0);
+        statDictionary[PlayerStat.WeaponB].Init(0);
+        statDictionary[PlayerStat.WeaponC].Init(0);
+        statDictionary[PlayerStat.WeaponD].Init(0);
         statDictionary[PlayerStat.Hp].Init(100);
         statDictionary[PlayerStat.HpMax].Init(100);
         statDictionary[PlayerStat.Exp].Init(0);
         statDictionary[PlayerStat.ExpMax].Init(10);
+
+        switch (StaticValues.playerCharacterNum)
+        {
+            case 0:
+                weaponContainers[0].GetComponent<WeaponContainerA>().Add();
+                statDictionary[PlayerStat.WeaponA].Increase();
+                statDictionary[PlayerStat.Strength].Increase();
+                break;
+            case 1:
+                weaponContainers[1].GetComponent<WeaponContainerB>().Add();
+                statDictionary[PlayerStat.WeaponB].Increase();
+                statDictionary[PlayerStat.Speed].Increase();
+                break;
+            case 2:
+                weaponContainers[2].GetComponent<WeaponContainerC>().Add();
+                statDictionary[PlayerStat.WeaponC].Increase();
+                statDictionary[PlayerStat.Magnet].Increase();
+                break;
+            case 3:
+                weaponContainers[3].GetComponent<WeaponContainerD>().Add();
+                statDictionary[PlayerStat.WeaponD].Increase();
+                statDictionary[PlayerStat.Life].Increase();
+                break;
+            default:
+                break;
+        }
 
         hpGuage.fillAmount = 1f;
         expGuage.fillAmount = 0f;
