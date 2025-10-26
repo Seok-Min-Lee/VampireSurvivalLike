@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] [Range(0, 7)] private int itemIndex;
+
     [Header("Current Value")]
     [SerializeField] protected int hp = 1;
     [SerializeField] private int hpMax = 1;
@@ -104,7 +106,7 @@ public class Enemy : MonoBehaviour
 
             if (ItemContainer.Instance != null)
             {
-                ItemContainer.Instance.Batch(transform.position);
+                ItemContainer.Instance.Batch(itemIndex, transform.position);
             }
 
             if (Player.Instance != null)

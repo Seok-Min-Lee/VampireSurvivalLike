@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
         statDictionary[PlayerStat.Hp].Init(100);
         statDictionary[PlayerStat.HpMax].Init(100);
         statDictionary[PlayerStat.Exp].Init(0);
-        statDictionary[PlayerStat.ExpMax].Init(100);
+        statDictionary[PlayerStat.ExpMax].Init(10);
 
         hpGuage.fillAmount = 1f;
         expGuage.fillAmount = 0f;

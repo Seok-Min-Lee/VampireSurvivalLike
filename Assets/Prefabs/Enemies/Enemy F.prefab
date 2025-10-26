@@ -253,12 +253,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3ce9277bbf96940b05ac70af95aef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemIndex: 5
   hp: 0
+  hpMax: 0
   power: 0
   speed: 0
-  isAddict: 0
   addictDamage: 0
-  hpMax: 0
+  isAddict: 0
   hpDefault: 60
   powerDefault: 6
   speedDefault: 1.6

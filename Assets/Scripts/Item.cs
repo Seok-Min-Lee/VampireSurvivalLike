@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    [SerializeField] private int value;
+    [SerializeField] private ItemInfo itemInfo;
+
+    private SpriteRenderer spriteRenderer;
     private bool isMove;
     private Coroutine coroutine;
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     private void Update()
     {
         if (isMove)
@@ -33,8 +39,10 @@ public class Item : MonoBehaviour
             OnDetected();
         }
     }
-    public void Init(Vector3 position)
+    public void Init(ItemInfo itemInfo, Vector3 position)
     {
+        this.itemInfo = itemInfo;
+        spriteRenderer.sprite = itemInfo.sprite;
         transform.position = position;
 
         gameObject.SetActive(true);
@@ -69,10 +77,17 @@ public class Item : MonoBehaviour
     {
         StopCoroutine(coroutine);
 
-        Player.Instance.GainExp(value);
+        Player.Instance.GainExp(itemInfo.value);
         ItemContainer.Instance.Reload(this);
 
         gameObject.SetActive(false);
         isMove = false;
+    }
+
+    [System.Serializable]
+    public struct ItemInfo
+    {
+        public int value;
+        public Sprite sprite;
     }
 }
