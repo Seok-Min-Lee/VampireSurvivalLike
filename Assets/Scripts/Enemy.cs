@@ -34,6 +34,8 @@ public class Enemy : MonoBehaviour
     private Animator animator;
 
     private float addictTimer = 0f;
+
+    private bool isDead = false;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
@@ -68,6 +70,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void Spawn(EnemyPool pool, int hpLevel, int powerLevel, int speedLevel, Vector3 position, Quaternion rotation)
     {
+        isDead = false;
+
         this.pool = pool;
         this.hpLevel = hpLevel;
         this.powerLevel = powerLevel;
@@ -88,6 +92,8 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Die()
     {
+        isDead = true;
+
         OffAddict();
 
         gameObject.SetActive(false);
@@ -98,9 +104,21 @@ public class Enemy : MonoBehaviour
     }
     public virtual void OnDamage(int damage)
     {
+        if (isDead) 
+        {
+            return;
+        } 
+
         hp -= damage;
 
-        if (hp < 0)
+        if (hp > 0)
+        {
+            animator.SetTrigger("doHit");
+
+            canvasGO.SetActive(true);
+            guage.fillAmount = (float)hp / (float)hpMax;
+        }
+        else
         {
             Die();
 
@@ -113,13 +131,6 @@ public class Enemy : MonoBehaviour
             {
                 Player.Instance.KillEnemy();
             }
-        }
-        else
-        {
-            animator.SetTrigger("doHit");
-
-            canvasGO.SetActive(true);
-            guage.fillAmount = (float)hp / (float)hpMax;
         }
     }
     public virtual void OnAddict(int value)
