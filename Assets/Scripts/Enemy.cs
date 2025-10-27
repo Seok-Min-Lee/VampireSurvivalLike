@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private GameObject character; 
+
     [SerializeField] [Range(0, 7)] private int itemIndex;
 
     [Header("Current Value")]
@@ -34,13 +37,16 @@ public class Enemy : MonoBehaviour
     private Animator animator;
 
     private float addictTimer = 0f;
+    private float knockbackTimer = 0f;
 
     private bool isDead = false;
+    private bool isKnockback = false;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+
+        spriteRenderer = character.GetComponent<SpriteRenderer>();
+        animator = character.GetComponent<Animator>();
     }
     private void Update()
     {
@@ -61,7 +67,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (!isDead && collision.gameObject.CompareTag("Player"))
         {
             Player.Instance.OnDamage(power);
             Die();
@@ -110,6 +116,7 @@ public class Enemy : MonoBehaviour
         } 
 
         hp -= damage;
+        Knockback(Vector3.zero);
 
         if (hp > 0)
         {
@@ -152,13 +159,37 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        if (rigidbody.linearVelocity != Vector2.zero)
+        if (isKnockback)
         {
-            rigidbody.linearVelocity = Vector2.zero;
+            knockbackTimer += Time.deltaTime;
+
+            if (knockbackTimer > .2f)
+            {
+                knockbackTimer = 0f;
+                isKnockback = false;
+                rigidbody.linearVelocity = Vector2.zero;
+            }
+        }
+        else
+        {
+            if (rigidbody.linearVelocity != Vector2.zero)
+            {
+                rigidbody.linearVelocity = Vector2.zero;
+            }
+
+            Vector2 dir = (target.position - transform.position).normalized;
+            transform.position += (Vector3)(dir * speed * Time.deltaTime);
+            spriteRenderer.flipX = dir.x > 0;
+        }
+    }
+    protected virtual void Knockback(Vector3 direction)
+    {
+        if (isKnockback)
+        {
+            return;
         }
 
-        Vector2 dir = (target.position - transform.position).normalized;
-        transform.position += (Vector3)(dir * speed * Time.deltaTime);
-        spriteRenderer.flipX = dir.x > 0;
+        rigidbody.AddForce(direction, ForceMode2D.Impulse);
+        isKnockback = true;
     }
 }
