@@ -36,6 +36,11 @@ public class WeaponContainerD : WeaponContainer<WeaponD>
 
     public void Launch()
     {
+        if (activeCount <= 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < activeCount; i++)
         {
             WeaponD bullet;
@@ -58,6 +63,7 @@ public class WeaponContainerD : WeaponContainer<WeaponD>
                 direction: direction
             );
         }
+        AudioManager.Instance.PlaySFX(SoundKey.WeaponDLaunch);
     }
     public void Reload(WeaponD bullet)
     {

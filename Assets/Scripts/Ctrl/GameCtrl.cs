@@ -25,6 +25,12 @@ public class GameCtrl : MonoBehaviour
     private void Start()
     {
         timeText.text = "00:00";
+        Debug.Log(AudioManager.Instance == null);
+        AudioManager.Instance.Load(() => 
+        {
+            AudioManager.Instance.Init(1f, 1f);
+            AudioManager.Instance.PlayBGM(SoundKey.BGM); 
+        });
     }
     private void Update()
     {
@@ -37,16 +43,19 @@ public class GameCtrl : MonoBehaviour
     }
     public void OnClickPause()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
         Time.timeScale = 0f;
         pauseWindow.SetActive(true);
     }
     public void OnClickResume()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
         pauseWindow.SetActive(false);
         Time.timeScale = 1f;
     }
     public void OnClickHome()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene("00_Title");
     }
@@ -70,6 +79,7 @@ public class GameCtrl : MonoBehaviour
     }
     public void OnGameEnd()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameEnd);
         Time.timeScale = 0f;
 
         float time = Time.time;

@@ -89,6 +89,8 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
                     direction: direction
                 );
 
+                AudioManager.Instance.PlaySFX(SoundKey.WeaponBLaunch);
+
                 yield return new WaitForSeconds(delay);
             }
         }

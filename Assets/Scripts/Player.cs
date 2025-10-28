@@ -140,6 +140,7 @@ public class Player : MonoBehaviour
             //
             GameCtrl.Instance.OnLevelUp();
             EnemyContainer.Instance.OnLevelUp();
+            AudioManager.Instance.PlaySFX(SoundKey.PlayerLevelUp);
         }
 
         statDictionary[PlayerStat.Exp].Init(exp);

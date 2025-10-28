@@ -69,6 +69,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isDead && collision.gameObject.CompareTag("Player"))
         {
+            AudioManager.Instance.PlaySFX(SoundKey.PlayerHit);
             Player.Instance.OnDamage(power);
             Die();
         }
@@ -113,8 +114,9 @@ public class Enemy : MonoBehaviour
         if (isDead) 
         {
             return;
-        } 
+        }
 
+        AudioManager.Instance.PlaySFX(SoundKey.EnemyHit);
         hp -= damage;
         Knockback(Vector3.zero);
 

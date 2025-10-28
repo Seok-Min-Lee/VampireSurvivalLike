@@ -7,11 +7,15 @@ public class TitleCtrl : MonoBehaviour
 
     public void OnClickPlay()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
+
         UnityEngine.SceneManagement.SceneManager.LoadScene("01_Select");
         Debug.Log("OnClickPlay");
     }
     public void OnClickExit()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
+
         Debug.Log("OnClickExit");
         Application.Quit();
     }

@@ -44,6 +44,8 @@ public class WeaponD : Weapon
     }
     public void Explosion()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.WeaponDExplosion);
+
         rigidbody.linearVelocity = Vector2.zero;
         rigidbody.angularVelocity = 0f;
         rigidbody.gravityScale = 0f;

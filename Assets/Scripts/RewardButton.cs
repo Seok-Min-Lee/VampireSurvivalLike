@@ -17,9 +17,11 @@ public class RewardButton : MonoBehaviour
     }
     public void OnClick()
     {
+        AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
+
         if (GameCtrl.Instance != null)
         {
-            GameCtrl.Instance?.OnClickReward();
+            GameCtrl.Instance.OnClickReward();
         }
 
         if (Player.Instance != null)

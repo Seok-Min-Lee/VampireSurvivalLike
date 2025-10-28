@@ -20,6 +20,8 @@ public class WeaponContainerC : WeaponContainer<WeaponC>
             return;
         }
 
+        AudioManager.Instance.PlaySFX(SoundKey.PlayerGetWeaponC);
+
         if (activeCount == 0)
         {
             weapons[0].gameObject.SetActive(true);
