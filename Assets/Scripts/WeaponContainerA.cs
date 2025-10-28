@@ -19,7 +19,7 @@ public class WeaponContainerA : WeaponContainer<WeaponA>
             return;
         }
 
-        transform.Rotate(Vector3.forward * speed);
+        transform.Rotate(Vector3.back * speed);
     }
     public override void Add()
     {

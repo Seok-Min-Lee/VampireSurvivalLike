@@ -19,7 +19,7 @@ public class Item : MonoBehaviour
         {
             Vector2 dir = Player.Instance.transform.position - transform.position;
 
-            if (dir.sqrMagnitude > 0.001f)
+            if (dir.sqrMagnitude > 0.01f)
             {
                 float distance = dir.magnitude;
 

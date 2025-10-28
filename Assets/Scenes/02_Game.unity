@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: -592160648459502713, guid: 12fdca63908c4334a84ade2c4ffd4182, type: 3}
   radius: 1
-  speed: 1
+  speed: 3
 --- !u!1 &258528781
 GameObject:
   m_ObjectHideFlags: 0
@@ -3516,6 +3516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0, z: 0}
   smoothSpeed: 3
+  player: {fileID: 0}
 --- !u!1 &972684545
 GameObject:
   m_ObjectHideFlags: 0

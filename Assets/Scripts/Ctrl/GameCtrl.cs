@@ -28,9 +28,14 @@ public class GameCtrl : MonoBehaviour
         Debug.Log(AudioManager.Instance == null);
         AudioManager.Instance.Load(() => 
         {
-            AudioManager.Instance.Init(1f, 1f);
+            AudioManager.Instance.Init(0.5f, 0.5f);
             AudioManager.Instance.PlayBGM(SoundKey.BGM); 
         });
+
+#if UNITY_EDITOR
+        Application.targetFrameRate = 30;
+        QualitySettings.vSyncCount = 0;
+#endif
     }
     private void Update()
     {
@@ -57,7 +62,7 @@ public class GameCtrl : MonoBehaviour
     {
         AudioManager.Instance.PlaySFX(SoundKey.GameTouch);
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("00_Title");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("01_Title");
     }
     public void OnLevelUp()
     {

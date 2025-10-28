@@ -101,13 +101,15 @@ public class Player : MonoBehaviour
         }
 #if !UNITY_EDITOR
         moveVec = new Vector3(joystick.Horizontal, joystick.Vertical, 0f) * speed;
+        Debug.Log(moveVec);
         transform.position += moveVec;
         spriteRenderer.flipX = moveVec.x < 0;
 
         float angle = Mathf.Atan2(joystick.Vertical, joystick.Horizontal) * Mathf.Rad2Deg;
         weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
-#endif
+#else
         transform.position += moveVec;
+#endif
     }
     public void KillEnemy()
     {
