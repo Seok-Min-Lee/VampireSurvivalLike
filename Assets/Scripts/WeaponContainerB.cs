@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class WeaponContainerB : WeaponContainer<WeaponB>
 {
-    [SerializeField] private StateToggle directionToggle;
-
     [SerializeField] private float radius = 1f;
     [SerializeField] private float bleedRatio = 0.1f;
 
@@ -16,7 +14,7 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
     private bool isReverse = false;
     private void Start()
     {
-        directionToggle.Init(isReverse);
+        stateToggle.Init(isReverse);
     }
     private void Update()
     {
@@ -34,10 +32,10 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
 
         timer += Time.deltaTime;
     }
-    public void OnClickDirection()
+    public override void OnClickStateToggle()
     {
         isReverse = !isReverse;
-        directionToggle.Init(isReverse);
+        stateToggle.Init(isReverse);
     }
     public override void StrengthenFirst()
     {

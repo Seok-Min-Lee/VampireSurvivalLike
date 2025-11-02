@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class WeaponContainerC : WeaponContainer<WeaponC>
 {
+    private bool isVisible = true;
     private void Awake()
     {
         this.Init();
+        stateToggle.Init(!isVisible);
+    }
+    public override void OnClickStateToggle()
+    {
+        isVisible = !isVisible;
+        stateToggle.Init(!isVisible);
+
+        weapons[0].TextureRenderer.enabled = isVisible;
     }
     public override void Init()
     {
@@ -25,6 +34,7 @@ public class WeaponContainerC : WeaponContainer<WeaponC>
         if (activeCount == 0)
         {
             weapons[0].gameObject.SetActive(true);
+            weapons[0].TextureRenderer.enabled = isVisible;
         }
         else
         {

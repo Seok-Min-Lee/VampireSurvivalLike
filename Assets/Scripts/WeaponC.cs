@@ -6,6 +6,7 @@ public class WeaponC : Weapon
     [SerializeField] private SpriteRenderer textureRenderer;
     [SerializeField] private float slowPower = 0f;
 
+    public SpriteRenderer TextureRenderer => textureRenderer;
     private CircleCollider2D collider;
 
     private void Awake()

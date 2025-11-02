@@ -6,9 +6,14 @@ public class WeaponContainer<T> : MonoBehaviour where T : Weapon
     protected int WEAPON_COUNT_MAX = 8;
 
     [SerializeField] protected T prefab;
+    [SerializeField] protected StateToggle stateToggle;
 
     protected List<T> weapons = new List<T>();
     protected int activeCount = 0;
+    public virtual void OnClickStateToggle()
+    {
+        return;
+    }
     public virtual void Init()
     {
         for (int i = 0; i < WEAPON_COUNT_MAX; i++)

@@ -72,11 +72,20 @@ public class Player : MonoBehaviour
         statDictionary[PlayerStat.Hp].Init(100);
         statDictionary[PlayerStat.HpMax].Init(100);
         statDictionary[PlayerStat.Exp].Init(0);
-        statDictionary[PlayerStat.ExpMax].Init(10);
+        statDictionary[PlayerStat.ExpMax].Init(20);
 
-
-        weaponContainers[2].GetComponent<WeaponContainerC>().StrengthenFirst();
-        statDictionary[PlayerStat.WeaponC].Increase();
+        //statDictionary[PlayerStat.ExpMax].Init(99999);
+        //for (int i = 0; i < 8; i++)
+        //{
+        //    weaponContainers[0].GetComponent<WeaponContainerA>().StrengthenFirst();
+        //    statDictionary[PlayerStat.WeaponA].Increase();
+        //    weaponContainers[1].GetComponent<WeaponContainerB>().StrengthenFirst();
+        //    statDictionary[PlayerStat.WeaponB].Increase();
+        //    weaponContainers[2].GetComponent<WeaponContainerC>().StrengthenFirst();
+        //    statDictionary[PlayerStat.WeaponC].Increase();
+        //    weaponContainers[3].GetComponent<WeaponContainerD>().StrengthenFirst();
+        //    statDictionary[PlayerStat.WeaponD].Increase();
+        //}
         switch (StaticValues.playerCharacterNum)
         {
             case 0:

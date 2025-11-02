@@ -32,10 +32,10 @@ public class GameCtrl : MonoBehaviour
     {
         timeText.text = "00:00";
         Debug.Log(AudioManager.Instance == null);
-        AudioManager.Instance.Load(() => 
+        AudioManager.Instance.Load(() =>
         {
             AudioManager.Instance.Init(0.5f, 0.5f);
-            AudioManager.Instance.PlayBGM(SoundKey.BGM); 
+            AudioManager.Instance.PlayBGM(SoundKey.BGM);
         });
 
 #if UNITY_EDITOR

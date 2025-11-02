@@ -6,18 +6,25 @@ public class WeaponContainerA : WeaponContainer<WeaponA>
 {
     [SerializeField] private float radius = 1f;
     [SerializeField] private float speed = 1f;
+    private bool isStop = false;
     private void Awake()
     {
         base.Init();
+        stateToggle.Init(isStop);
     }
     private void Update()
     {
-        if (Time.timeScale == 0f)
+        if (isStop || Time.timeScale == 0f)
         {
             return;
         }
 
         transform.Rotate(Vector3.back * speed);
+    }
+    public override void OnClickStateToggle()
+    {
+        isStop = !isStop;
+        stateToggle.Init(isStop);
     }
     public override void StrengthenFirst()
     {
