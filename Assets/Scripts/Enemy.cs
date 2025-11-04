@@ -1,10 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private GameObject character; 
+    [SerializeField] private GameObject character;
+    [SerializeField] private ParticleSystem particle;
 
     [SerializeField] [Range(0, 7)] private int itemIndex;
 
@@ -39,6 +41,8 @@ public class Enemy : MonoBehaviour
 
     private Transform target;
     private EnemyPool pool;
+
+    private BoxCollider2D collider;
     private Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -51,6 +55,7 @@ public class Enemy : MonoBehaviour
     private bool isKnockback = false;
     private void Awake()
     {
+        collider = GetComponent<BoxCollider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
 
         spriteRenderer = character.GetComponent<SpriteRenderer>();
@@ -121,17 +126,35 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Die()
     {
-        isDead = true;
+        StartCoroutine(Cor());
 
-        OffAddict();
-        OffBleed();
-        OffSlow();
+        IEnumerator Cor()
+        {
+            particle.Play(); 
 
-        gameObject.SetActive(false);
-        pool.Charge(this);
+            isDead = true;
+            target = null;
 
-        target = null;
-        pool = null;
+            OffAddict();
+            OffBleed();
+            OffSlow();
+
+            rigidbody.linearVelocity = Vector2.zero;
+            collider.enabled = false;
+            character.SetActive(false);
+            canvasGO.SetActive(false);
+
+            yield return new WaitForSeconds(1f);
+            
+            collider.enabled = true;
+            gameObject.SetActive(false);
+            character.SetActive(true);
+            canvasGO.SetActive(true);
+
+
+            pool.Charge(this);
+            pool = null;
+        }
     }
     public virtual void OnDamage(int damage)
     {
@@ -243,7 +266,8 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Knockback(Vector3 direction)
     {
-        if (direction != Vector3.zero &&
+        if (!isDead &&
+            direction != Vector3.zero &&
             rigidbody.linearVelocity == Vector2.zero)
         {
             rigidbody.AddForce(direction, ForceMode2D.Impulse);

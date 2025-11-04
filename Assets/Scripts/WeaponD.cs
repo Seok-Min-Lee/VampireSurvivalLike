@@ -6,11 +6,13 @@ public class WeaponD : Weapon
     [SerializeField] private WeaponDFlare flare;
 
     private Rigidbody2D rigidbody;
+    private SpriteRenderer spriteRenderer;
     private WeaponContainerD container;
     private float timer = 0f;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void Update()
     {
@@ -25,7 +27,7 @@ public class WeaponD : Weapon
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Explosion();
+            Explode();
         }
     }
     public void Init(WeaponContainerD container, int knockbackPower)
@@ -43,7 +45,7 @@ public class WeaponD : Weapon
         rigidbody.AddForce(direction * Random.Range(8f, 16f), ForceMode2D.Impulse);
         rigidbody.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
     }
-    public void Explosion()
+    public void Explode()
     {
         AudioManager.Instance.PlaySFX(SoundKey.WeaponDExplosion);
 
@@ -51,7 +53,10 @@ public class WeaponD : Weapon
         rigidbody.angularVelocity = 0f;
         rigidbody.gravityScale = 0f;
 
-        flare.gameObject.SetActive(true);
+        spriteRenderer.enabled = false;
+
+        flare.Explode();
+
         StartCoroutine(Cor());
 
         IEnumerator Cor()
@@ -68,10 +73,10 @@ public class WeaponD : Weapon
         rigidbody.angularVelocity = 0f;
         rigidbody.gravityScale = 5f;
 
+        spriteRenderer.enabled = true;
+
         gameObject.SetActive(false);
         container.Reload(this);
-
-        flare.gameObject.SetActive(false);
     }
     public override void Strengthen()
     {

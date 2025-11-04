@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform[] weaponContainers;
     [SerializeField] private Transform magnetArea;
+    [SerializeField] private ParticleSystem healParticle;
 
     [SerializeField] private float speed = 0.025f;
 
@@ -76,7 +77,7 @@ public class Player : MonoBehaviour
         statDictionary[PlayerStat.Hp].Init(100);
         statDictionary[PlayerStat.HpMax].Init(100);
         statDictionary[PlayerStat.Exp].Init(0);
-        statDictionary[PlayerStat.ExpMax].Init(20);
+        statDictionary[PlayerStat.ExpMax].Init(10);
 
         //statDictionary[PlayerStat.ExpMax].Init(99999);
         //for (int i = 0; i < 8; i++)
@@ -129,8 +130,10 @@ public class Player : MonoBehaviour
 
         if (healTimer > 10f)
         {
-            int value = Mathf.Max(Life, Hp + Life - HpMax);
+            healParticle.Play();
+            int value = Hp + Life > HpMax ? HpMax - Hp : Life;
             statDictionary[PlayerStat.Hp].Increase(value);
+            hpGuage.fillAmount = (float)Hp / HpMax;
 
             healTimer = 0f;
         }
@@ -260,7 +263,7 @@ public class Player : MonoBehaviour
         if (hp > 0)
         {
             canvasGO.SetActive(true);
-            hpGuage.fillAmount = (float)hp / (float)hpMax;
+            hpGuage.fillAmount = (float)hp / hpMax;
 
             animator.SetTrigger("doHit");
 
