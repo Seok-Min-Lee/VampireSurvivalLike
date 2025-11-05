@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +14,7 @@ public class GameCtrl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timeScoreText;
     [SerializeField] private TextMeshProUGUI killScoreText;
 
+    [SerializeField] private GameObject normalWindow;
     [SerializeField] private GameObject pauseWindow;
     [SerializeField] private GameObject rewardWindow;
     [SerializeField] private GameObject scoreWindow;
@@ -167,16 +170,27 @@ public class GameCtrl : MonoBehaviour
     }
     public void OnGameEnd()
     {
-        AudioManager.Instance.PlaySFX(SoundKey.GameEnd);
-        Time.timeScale = 0f;
+        Sequence seq = DOTween.Sequence();
 
-        float time = Time.time;
-        int minutes = (int)(time / 60);
-        int seconds = (int)(time % 60);
+        seq.Append(DOVirtual.DelayedCall(0f, () =>
+        {
+            AudioManager.Instance.PlaySFX(SoundKey.GameEnd);
 
-        timeScoreText.text = $"생존 시간\n{minutes:00}:{seconds:00}";
-        killScoreText.text = $"처치 수\n {Player.Instance.killCount.ToString("#,##0")}";
+            int minutes = (int)(timer / 60);
+            int seconds = (int)(timer % 60);
+            timeScoreText.text = $"생존 시간\n{minutes:00}:{seconds:00}";
+            killScoreText.text = $"처치 수\n {Player.Instance.killCount.ToString("#,##0")}";
 
-        scoreWindow.SetActive(true);
+            normalWindow.GetComponent<CanvasGroup>().DOFade(0f, 0.5f);
+            Player.Instance.OnDeath();
+        }));
+
+        seq.Append(DOVirtual.DelayedCall(2.5f, () => 
+        {
+            scoreWindow.SetActive(true);
+            CanvasGroup cg = scoreWindow.GetComponent<CanvasGroup>();
+            cg.alpha = 0f;
+            cg.DOFade(1f, 0.5f);
+        }));
     }
 }

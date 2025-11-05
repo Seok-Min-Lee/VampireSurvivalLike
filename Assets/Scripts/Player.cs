@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform[] weaponContainers;
     [SerializeField] private Transform magnetArea;
+    [SerializeField] private Transform characterArea;
     [SerializeField] private ParticleSystem healParticle;
 
     [SerializeField] private float speed = 0.025f;
@@ -18,6 +20,7 @@ public class Player : MonoBehaviour
     [Header("UI")]
     [SerializeField] private VariableJoystick joystick;
     [SerializeField] private GameObject canvasGO;
+    [SerializeField] private CanvasGroup overlayCanvasCG;
     [SerializeField] private Image hpGuage;
     [SerializeField] private Image expGuage;
     [SerializeField] private StatSlot[] statSlots;
@@ -38,18 +41,25 @@ public class Player : MonoBehaviour
 
     public Vector3 moveVec { get; private set; }
     public Animator animator { get; private set; }
-    public SpriteRenderer spriteRenderer { get; private set; }
 
+    private BoxCollider2D collider;
+    private SpriteRenderer characterRenderer;
     private SpriteRenderer magnetRenderer;
+
+    private bool isDead = false;
     private bool isMagnetVisible = false;
     private void Awake()
     {
         Instance = this;
 
         // 캐릭터 선택
-        GameObject character = GameObject.Instantiate(Resources.Load<GameObject>("Players/Character_" + StaticValues.playerCharacterNum), transform);
+        GameObject character = GameObject.Instantiate(Resources.Load<GameObject>("Players/Character_" + StaticValues.playerCharacterNum), characterArea);
+        character.transform.position = Vector3.zero;
+
         animator = character.GetComponent<Animator>();
-        spriteRenderer = character.GetComponent<SpriteRenderer>();
+        characterRenderer = character.GetComponent<SpriteRenderer>();
+
+        collider = GetComponent<BoxCollider2D>();
 
         magnetRenderer = magnetArea.GetComponent<SpriteRenderer>();
         magnetRenderer.enabled = isMagnetVisible;
@@ -78,7 +88,7 @@ public class Player : MonoBehaviour
         statDictionary[PlayerStat.HpMax].Init(100);
         statDictionary[PlayerStat.Exp].Init(0);
         statDictionary[PlayerStat.ExpMax].Init(10);
-
+        
         //statDictionary[PlayerStat.ExpMax].Init(99999);
         //for (int i = 0; i < 8; i++)
         //{
@@ -126,7 +136,7 @@ public class Player : MonoBehaviour
     private float healTimer = 0f;
     private void Update()
     {
-        if (Life == 0) return;
+        if (isDead || Life == 0) return;
 
         if (healTimer > 10f)
         {
@@ -142,14 +152,11 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
+        if (isDead) return;
 #if !UNITY_EDITOR
         moveVec = new Vector3(joystick.Horizontal, joystick.Vertical, 0f).normalized * speed;
         transform.position += moveVec;
-        spriteRenderer.flipX = moveVec.x < 0;
+        characterRenderer.flipX = moveVec.x < 0;
 
         float angle = Mathf.Atan2(joystick.Vertical, joystick.Horizontal) * Mathf.Rad2Deg;
         weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
@@ -253,8 +260,36 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-    public virtual void OnDamage(int damage)
+    public void OnDeath()
     {
+        Tween preprocess = DOVirtual.DelayedCall(0f, () =>
+        {
+            isDead = true;
+            collider.enabled = false;
+
+            isMagnetVisible = false;
+            magnetRenderer.enabled = isMagnetVisible;
+
+            for (int i = 0; i < weaponContainers.Length; i++)
+            {
+                weaponContainers[i].gameObject.SetActive(false);
+            }
+
+            canvasGO.SetActive(false);
+        });
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(preprocess);
+        seq.Append(overlayCanvasCG.DOFade(0f, 0.5f));
+        seq.AppendInterval(0.25f);
+        seq.Append(characterArea.DORotate(new Vector3(0, 0, 90), 0.5f).SetEase(Ease.OutBack));
+        seq.AppendInterval(0.25f);
+        seq.Append(characterArea.DOScaleX(0f, 0.5f));
+    }
+    public void OnDamage(int damage)
+    {
+        if (isDead) return;
+
         int hp = statDictionary[PlayerStat.Hp].value;
         int hpMax = statDictionary[PlayerStat.HpMax].value;
 
@@ -288,7 +323,7 @@ public class Player : MonoBehaviour
             float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
             weaponContainers[1].rotation = Quaternion.Euler(0, 0, angle);
 
-            spriteRenderer.flipX = moveVec.x < 0;
+            characterRenderer.flipX = moveVec.x < 0;
         }
         else
         {
