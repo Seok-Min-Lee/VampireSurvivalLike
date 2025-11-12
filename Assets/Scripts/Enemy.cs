@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
     private float bleedTimer = 0f;
     private float knockbackTimer = 0f;
 
-    private bool isDead = false;
+    public bool isDead { get; private set; } = false;
     private bool isKnockback = false;
     private void Awake()
     {

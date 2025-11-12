@@ -19,6 +19,7 @@ public class EnemyPool : MonoBehaviour
 
     private int count;
 
+    public List<Enemy> actives { get; private set; } = new List<Enemy>();
     private Queue<Enemy> pool = new Queue<Enemy>();
 
     private float timer = 0f;
@@ -40,6 +41,7 @@ public class EnemyPool : MonoBehaviour
     public void Charge(Enemy enemy)
     {
         pool.Enqueue(enemy);
+        actives.Remove(enemy);
         count--;
     }
 
@@ -73,6 +75,8 @@ public class EnemyPool : MonoBehaviour
                 position: position, 
                 rotation: Quaternion.identity
             );
+
+            actives.Add(enemy);
 
             count++;
         }

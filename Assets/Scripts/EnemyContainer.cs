@@ -4,6 +4,8 @@ public class EnemyContainer : MonoBehaviour
 {
     public static EnemyContainer Instance { get; private set; }
 
+    public EnemyPool currentPool => pools[stage];
+
     [SerializeField] private EnemyPool[] pools;
     [SerializeField] private int stage = 0;
 

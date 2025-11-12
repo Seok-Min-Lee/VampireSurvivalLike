@@ -3610,11 +3610,11 @@ PrefabInstance:
     - target: {fileID: 333455530756081547, guid: 1ee1c4145a7a1764cb0f2188f1de9872, type: 3}
       propertyPath: onSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 920af10400dc30249bc2008755336f78, type: 3}
+      objectReference: {fileID: 21300000, guid: 015203e3e02fbe34b8656ebcc182067c, type: 3}
     - target: {fileID: 333455530756081547, guid: 1ee1c4145a7a1764cb0f2188f1de9872, type: 3}
       propertyPath: offSprite
       value: 
-      objectReference: {fileID: 21300000, guid: bc84a1d881b760e4d868996861671fba, type: 3}
+      objectReference: {fileID: 21300000, guid: 9ed00c30112311c47bd5b837536e0a69, type: 3}
     - target: {fileID: 3700550278664228167, guid: 1ee1c4145a7a1764cb0f2188f1de9872, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -7447,6 +7447,7 @@ MonoBehaviour:
   stateToggle: {fileID: 1041378663}
   radius: 0.5
   bleedRatio: 0.1
+  detectRaidus: 5
 --- !u!1 &1262095959
 GameObject:
   m_ObjectHideFlags: 0

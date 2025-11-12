@@ -8,14 +8,14 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
 {
     [SerializeField] private float radius = 1f;
     [SerializeField] private float bleedRatio = 0.1f;
-
+    [SerializeField] private float detectRaidus = 5f;
 
     private Queue<WeaponB> bulletPool = new Queue<WeaponB>();
     private float timer = 0f;
-    private bool isReverse = false;
+    private bool isRandom = false;
     private void Start()
     {
-        stateToggle.Init(isReverse);
+        stateToggle.Init(isRandom);
     }
     private void Update()
     {
@@ -26,7 +26,14 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
 
         if (timer > 1f)
         {
-            Launch();
+            if (isRandom)
+            {
+                LaunchRandom();
+            }
+            else
+            {
+                LaunchAuto();
+            }
 
             timer = 0f;
         }
@@ -37,8 +44,8 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
     {
         base.OnClickStateToggle();
 
-        isReverse = !isReverse;
-        stateToggle.Init(isReverse);
+        isRandom = !isRandom;
+        stateToggle.Init(isRandom);
     }
     public override void StrengthenFirst()
     {
@@ -52,7 +59,7 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
     {
         bleedRatio += 0.05f;
     }
-    public void Launch()
+    public void LaunchForward()
     {
         if (activeCount == 0)
         {
@@ -81,10 +88,10 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
                 bullet.OnShot(
                     container: this,
                     bleedRatio: bleedRatio,
-                    flipX: isReverse,
+                    flipX: isRandom,
                     position: position,
                     rotation: transform.rotation,
-                    direction: isReverse ? direction * -1 : direction
+                    direction: isRandom ? direction * -1 : direction
                 );
 
                 AudioManager.Instance.PlaySFX(SoundKey.WeaponBLaunch);
@@ -93,8 +100,116 @@ public class WeaponContainerB : WeaponContainer<WeaponB>
             }
         }
     }
+    private Collider2D[] detectBuffer = new Collider2D[32];
+    public void LaunchAuto()
+    {
+        if (activeCount == 0)
+        {
+            return;
+        }
+
+        StartCoroutine(Cor());
+
+        IEnumerator Cor()
+        {
+            Vector3 playerPosition = Player.Instance.transform.position;
+            ContactFilter2D contactFilter = new ContactFilter2D();
+            contactFilter.layerMask = LayerMask.GetMask("Enemy");
+
+            int count = activeCount;
+            float delay = 1f / count;
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 target;
+
+                // 주변의 적을 탐색하여 가장 가까운 적을 타겟으로 한다.
+                int detectCount = Physics2D.OverlapCircle(
+                    point: Player.Instance.transform.position,
+                    radius: detectRaidus,
+                    contactFilter: contactFilter,
+                    results: detectBuffer
+                );
+
+                // 주변에 적이 없는 경우 랜덤한 방향으로 사출한다.
+                if (detectCount < 1)
+                {
+                    target = playerPosition + (Vector3)Random.insideUnitCircle.normalized;
+                }
+                else
+                {
+                    target = detectBuffer.Take(detectCount)
+                                         .OrderBy(x => Vector3.SqrMagnitude(x.transform.position - playerPosition))
+                                         .First().transform.position;
+                }
+
+                Launch(target);
+
+                yield return new WaitForSeconds(delay);
+            }
+        }
+    }
+    public void LaunchRandom()
+    {
+        if (activeCount == 0)
+        {
+            return;
+        }
+
+        StartCoroutine(Cor());
+
+        IEnumerator Cor()
+        {
+            Vector3 playerPosition = Player.Instance.transform.position;
+
+            int count = activeCount;
+            float delay = 1f / count;
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 target = playerPosition + (Vector3)Random.insideUnitCircle.normalized;
+
+                Launch(target);
+
+                yield return new WaitForSeconds(delay);
+            }
+        }
+    }
+    public void Launch(Vector3 target)
+    {
+        WeaponB bullet = bulletPool.Count > 0 ?
+                         bulletPool.Dequeue() :
+                         GameObject.Instantiate<WeaponB>(prefab);
+
+        //
+        Vector3 position = Player.Instance.transform.position + (Vector3)Random.insideUnitCircle * 0.25f;
+        Vector3 direction = (target - position).normalized;
+
+        // 방향을 각도로 변환 (라디안 → 도)
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //
+        bullet.OnShot(
+            container: this,
+            bleedRatio: bleedRatio,
+            flipX: false,
+            position: position,
+            rotation: Quaternion.Euler(0, 0, angle),
+            direction: direction
+        );
+
+        AudioManager.Instance.PlaySFX(SoundKey.WeaponBLaunch);
+    }
     public void Reload(WeaponB bullet)
     {
         bulletPool.Enqueue(bullet);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (Player.Instance == null)
+        {
+            return;
+        }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(Player.Instance.transform.position, detectRaidus);
     }
 }
