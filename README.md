@@ -22,7 +22,8 @@ MonsterRush는 Unity로 제작한 Android 액션 게임이며,</br>
 </table>
 
 </br>
-[구글 플레이 스토어 링크](https://play.google.com/store/apps/details?id=com.DefaultCompany.VampireSurvivalLike)
+[플레이 영상] https://youtu.be/OiI66l4GNGo</br>
+[구글 플레이 스토어 링크] https://play.google.com/store/apps/details?id=com.DefaultCompany.VampireSurvivalLike
 
 
 # 목표 
